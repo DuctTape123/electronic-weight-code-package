@@ -14,6 +14,7 @@ import time
 def onVoltageRatioInput0_VoltageRatioChange(self, voltageRatio):
 	#print("VoltageRatio [0]: " + str(voltageRatio))
 	if voltageRatio != v[0]:
+		v2[0] = "{:.0f}".format(round(voltageRatio * 100000000))
 		v[0] = "{:.0f}".format(round(voltageRatio * 100000000))
 
 def onVoltageRatioInput0_Attach(self):
@@ -30,6 +31,7 @@ def onVoltageRatioInput0_Error(self, code, description):
 def onVoltageRatioInput1_VoltageRatioChange(self, voltageRatio):
 	#print("VoltageRatio [1]: " + str(voltageRatio))
 	if voltageRatio != v[1]:
+		v2[1] = "{:.0f}".format(round(voltageRatio * 100000000))
 		v[1] = "{:.0f}".format(round(voltageRatio * 100000000))
 
 def onVoltageRatioInput1_Attach(self):
@@ -46,6 +48,7 @@ def onVoltageRatioInput1_Error(self, code, description):
 def onVoltageRatioInput2_VoltageRatioChange(self, voltageRatio):
 	#print("VoltageRatio [2]: " + str(voltageRatio))
 	if voltageRatio != v[2]:
+		v2[2] = "{:.0f}".format(round(voltageRatio * 100000000))
 		v[2] = "{:.0f}".format(round(voltageRatio * 100000000))
 
 def onVoltageRatioInput2_Attach(self):
@@ -65,9 +68,9 @@ def onVoltageRatioInput3_VoltageRatioChange(self, voltageRatio):
 		prev = 0
 		if voltageRatio != v[3]:
 			v[3] = "{:.0f}".format(round((voltageRatio) * 100000000))
-		writer.writerow(v)
+			v2[3] = "{:.0f}".format(round((voltageRatio) * 100000000))
 		prev = f2.tell()
-		print(v)
+		print(v2)
 		f2.write(str(v[0]) + ' ')
 		f2.write(str(v[1]) + ' ')
 		f2.write(str(v[2]) + ' ')
@@ -78,6 +81,18 @@ def onVoltageRatioInput3_VoltageRatioChange(self, voltageRatio):
 		f2.seek(prev)
 		d[3] = d[3][:-1]
 		d[3] = d[3][:-1]
+		v[0] = round((float(v[0])) / 240) + 6
+		v[1] = round((float(v[1])) / 240) + 1
+		v[2] = round((float(v[2])) / 240) - 1
+		v[3] = round((float(v[3])) / 240) + 5
+		v2[0] = round((float(v2[0])) + -4.264) / 72.9
+		v2[1] = round((float(v2[1])) + -26.4) / 63.02
+		v2[2] = round((float(v2[2])) + 378) / 67.1
+		v2[3] = round((float(v2[3])) + -1141) / 52.4
+		writer.writerow('my')
+		writer.writerow(v)
+		writer.writerow('their')
+		writer.writerow(v2)
 	except:
 		pass
 	
@@ -159,15 +174,15 @@ def main():
 		print("PhidgetException " + str(ex.code) + " (" + ex.description + "): " + ex.details)
 
 v = [0, 0, 0, 0]
+v2 = [0,0,0,0]
 d = ''
 fig = plt.figure()
 ax1 = fig.add_subplot(1,1,1)
-fileName2 = 'C:\\Computer Science\\School project in Py\\Phidget_1046_0_Python_Example\\data.txt'
+fileName2 = 'data.txt'
 f2 = open(fileName2, 'r+') 
 header = ['Channel 0','Channel 1' , 'Channel 2', 'Channel 3']
-fileName = 'C:\\Computer Science\\School project in Py\\Phidget_1046_0_Python_Example\\data.csv'
+fileName = 'data.csv'
 with open(fileName, 'r+', newline = '', encoding = 'UTF-8') as f:
 	writer = csv.writer(f)
 	writer.writerow(header)
-	nothing = f.readline()
 	main()
